@@ -19,17 +19,26 @@ app.post(`/webhook`, async (req, res) => {
   if (message.text === "/start") {
     await axios.post(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
       chat_id: message.chat.id,
-      text: "🎮 Грати",
+      text: "🎮 Натисни кнопку нижче, щоб почати гру 🐤",
       reply_markup: {
-        inline_keyboard: [[
-          { text: "🎮 Грати", web_app: { url: `${WEBAPP_URL}?start_param=play` } }
-        ]]
+        keyboard: [
+          [{ text: "🎮 Грати", web_app: { url: `${WEBAPP_URL}?start_param=play` } }]
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: true
       }
     });
   }
 
   res.sendStatus(200);
 });
+
+app.get("/", (req, res) => {
+  res.send("Bot is running");
+});
+
+app.listen(PORT, () => console.log(`Bot server running on port ${PORT}`));
+
 
 app.get("/", (req, res) => {
   res.send("Bot is running");
