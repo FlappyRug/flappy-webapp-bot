@@ -4,16 +4,16 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
+
 const TOKEN = process.env.TOKEN;
-const WEBAPP_URL = process.env.WEBAPP_URL;
+const WEBAPP_URL = process.env.WEBAPP_URL; // https://birdgame-brown.vercel.app
+const SERVER_URL = process.env.SERVER_URL; // https://telegram-webapp-bot-pk72.onrender.com
 const PORT = process.env.PORT || 3000;
 const GAME_SHORT_NAME = 'lastflight';
 
-// === Telegram Bot ===
 const bot = new TelegramBot(TOKEN);
-bot.setWebHook(`${process.env.SERVER_URL}/webhook`);
+bot.setWebHook(`${SERVER_URL}/webhook`);
 
-// === Middleware ===
 app.use(bodyParser.json());
 
 // === Webhook Endpoint ===
@@ -22,13 +22,13 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200);
 });
 
-// === Handle /start ===
+// === /start command ===
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendGame(chatId, GAME_SHORT_NAME);
 });
 
-// === Handle Callback Query ===
+// === Game launch (callback_query) ===
 bot.on('callback_query', (query) => {
   const gameUrl = `${WEBAPP_URL}?userId=${query.from.id}`;
   bot.answerCallbackQuery({
@@ -37,12 +37,12 @@ bot.on('callback_query', (query) => {
   });
 });
 
-// === Keep-alive Route ===
+// === Keep-alive route ===
 app.get('/', (req, res) => {
   res.send('✅ Game bot is live');
 });
 
-// === Start Server ===
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
+
