@@ -20,16 +20,14 @@ app.post("/webhook", async (req, res) => {
       chat_id: message.chat.id,
       text: "Натисни кнопку нижче, щоб почати гру 🐤",
       reply_markup: {
-        keyboard: [[
+        inline_keyboard: [[
           {
             text: "🎮 Грати",
             web_app: {
               url: `${WEBAPP_URL}?start_param=play`
             }
           }
-        ]],
-        resize_keyboard: true,
-        one_time_keyboard: true
+        ]]
       }
     });
   }
