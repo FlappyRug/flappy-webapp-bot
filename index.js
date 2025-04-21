@@ -22,7 +22,7 @@ app.post(`/webhook`, async (req, res) => {
       text: "🎮 Грати",
       reply_markup: {
         inline_keyboard: [[
-          { text: "🎮 Грати", web_app: { url: WEBAPP_URL } }
+          { text: "🎮 Грати", web_app: { url: `${WEBAPP_URL}?start_param=play` } }
         ]]
       }
     });
